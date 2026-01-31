@@ -1,149 +1,105 @@
-doctype html
-html(lang=config.language)
-  head
-    meta(http-equiv="Content-Type", content="text/html; charset=UTF-8")
-    meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
-    meta(name="theme-color", content=theme.colors.primary)
-    meta(name="msapplication-navbutton-color", content=theme.colors.primary)
-    meta(name="apple-mobile-web-app-capable", content="yes")
-    meta(name="apple-mobile-web-app-status-bar-style", content="black-translucent")
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="theme-color" content="#1a1a1a"><meta name="msapplication-navbutton-color" content="#1a1a1a"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><title>Hexo</title><script>(function() {
+  // 尽早应用暗色模式，防止闪烁
+  var savedDarkMode = localStorage.getItem('darkMode') === 'true';
+  if (savedDarkMode) {
+    document.documentElement.classList.add('dark-mode');
+  }
+})();
+</script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Playfair+Display:wght@400;500;600;700&amp;family=Fira+Code:wght@400;500&amp;display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script><link rel="icon" href="/null">
+<link rel="stylesheet" href="/css/main.css">
 
-    title= page_title ? page_title + ' - ' + config.title : config.title
+<link rel="stylesheet" href="/css/tags.css">
 
-    //- Dark mode script to prevent flash
-    if theme.features && theme.features.dark_mode
-      script.
-        (function() {
-          // 尽早应用暗色模式，防止闪烁
-          var savedDarkMode = localStorage.getItem('darkMode') === 'true';
-          if (savedDarkMode) {
-            document.documentElement.classList.add('dark-mode');
-          }
-        })();
+<link rel="stylesheet" href="/css/categories.css">
 
-    //- Fonts
-    link(rel="preconnect", href="https://fonts.googleapis.com")
-    link(rel="preconnect", href="https://fonts.gstatic.com", crossorigin)
-    link(href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap", rel="stylesheet")
+<link rel="stylesheet" href="/css/categories-accordion.css">
 
-    //- Font Awesome Icons
-    link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css")
+<link rel="stylesheet" href="/css/highlight.css">
 
-    //- QR Code library for WeChat sharing
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js")
+<link rel="stylesheet" href="/css/toc.css">
 
-    //- RSS
-    if feed
-      link(rel="alternate", href=feed, title=config.title, type="application/atom+xml")
+<link rel="stylesheet" href="/css/image-zoom.css">
 
-    //- Favicon
-    link(rel="icon", href=url_for(theme.favicon))
+<link rel="stylesheet" href="/css/share.css">
 
-    //- Styles
-    != css('css/main')
-    != css('css/tags')
-    != css('css/categories')
-    != css('css/categories-accordion')
-    != css('css/highlight')
-    != css('css/toc')
-    != css('css/image-zoom')
-    != css('css/share')
-    != css('css/mobile-nav')
-    != css('css/search')
-    != css('css/scrollbar')
-    != css('css/timeline')
-    != css('css/animations')
-    != css('css/ai-theme')
-    != css('css/loading-animation')
-    != css('css/article-modal')
-    // 条件加载关于页面样式
-    if page.path === 'about/index.html'
-      != css('css/about')
+<link rel="stylesheet" href="/css/mobile-nav.css">
 
-    //- Theme color variables from config
-    style.
-      :root {
-        --primary-color: #{theme.colors.primary};
-        --secondary-color: #{theme.colors.secondary};
-        --accent-color: #{theme.colors.accent};
-        --background-color: #{theme.colors.background};
-        --text-color: #{theme.colors.text};
-        --overlay-color: #{theme.colors.overlay};
-        --tag-background-color: #{theme.colors.tag_background};
-        --card-background-color: #{theme.colors.card_background};
-      }
+<link rel="stylesheet" href="/css/search.css">
 
-    //- Custom head
-    if theme.custom_head
-      != theme.custom_head
+<link rel="stylesheet" href="/css/scrollbar.css">
 
-    //- Inject head
-    if theme.inject && theme.inject.head
-      each item in theme.inject.head
-        != item
+<link rel="stylesheet" href="/css/timeline.css">
 
-  body
-    #app
-      != partial('_partial/header')
-      != partial('_partial/search')
+<link rel="stylesheet" href="/css/animations.css">
 
-      main.main
-        != body
+<link rel="stylesheet" href="/css/ai-theme.css">
 
-      != partial('_partial/footer')
+<link rel="stylesheet" href="/css/loading-animation.css">
 
-    // 立即应用暗色模式，避免页面闪烁
-    if theme.features && theme.features.dark_mode
-      script.
-        (function() {
-          // 检查本地存储中的暗色模式设置
-          const savedDarkMode = localStorage.getItem('darkMode') === 'true';
-          // 如果设置为暗色模式，立即应用到body
-          if (savedDarkMode) {
-            document.body.classList.add('dark-mode');
-          }
+<link rel="stylesheet" href="/css/article-modal.css">
+<!-- 条件加载关于页面样式--><style>:root {
+  --primary-color: #1a1a1a;
+  --secondary-color: #666666;
+  --accent-color: #ff6b6b;
+  --background-color: #ffffff;
+  --text-color: #333333;
+  --overlay-color: rgba(0, 0, 0, 0.7);
+  --tag-background-color: #ffffff;
+  --card-background-color: #ffffff;
+}
+</style><link rel="stylesheet" href="https://cdn1.tianli0.top/gh/qxchuckle/Post-Summary-AI/chuckle-post-ai.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><meta name="generator" content="Hexo 8.1.1"></head><body><div id="app"><header class="header navbar-bubble"><nav class="nav"><div class="nav-container"><div class="nav-logo"><a href="/"><span class="nav-title">Hexo</span></a></div><div class="nav-menu"><a class="nav-item" href="/">首页</a><a class="nav-item" href="/about/">关于</a><a class="nav-item active" href="/archives/">归档</a><a class="nav-item" href="/categories/">分类</a><a class="nav-item" href="/tags/">标签</a><a class="nav-item" href="/link/">友链</a><div class="nav-item has-submenu"><span class="nav-link">网站</span><div class="submenu"><a class="submenu-item" href="https://example.com">示例网站</a></div></div><!-- 搜索按钮--><div class="search-toggle"><i class="fas fa-search"></i></div></div><div class="nav-toggle"><span></span><span></span><span></span></div></div></nav></header><div class="search-overlay"><div class="search-container"><div class="search-form"><input class="search-input" type="text" placeholder="搜索文章..."/><div class="search-close">×</div></div><div class="search-results"></div></div></div><main class="main"><div class="archive-container"><div class="archive-header"><h1 class="archive-title">Archives</h1></div><div class="archive-content"><div class="timeline"><div class="archive-year"><h2 class="year-title">2026</h2></div><div class="archive-post"><div class="archive-date"><time datetime="2026-01-30T13:45:17.691Z">Jan 30</time></div><div class="archive-info"><h3 class="archive-post-title"><a href="/2026/01/30/hello-world/">Hello World</a></h3><div class="archive-meta"></div></div></div></div></div></div></main><footer class="footer"><div class="footer-bottom"><div class="footer-copyright">© 2025 李思然. All rights reserved.</div><!-- Footer centered image with link--><div class="footer-image" style="text-align: center; margin: 15px 0;"><a href="https://www.upyun.com/?utm_source=lianmeng&amp;utm_medium=referral" target="_blank" rel="noopener noreferrer"><img src="https://s21.ax1x.com/2024/08/23/pAFm0cq.png" alt="Footer Image" style="max-width: 100%; height: auto;"/></a></div><div class="footer-badges"><a target="_blank" rel="noopener" href="https://hexo.io/" title="博客框架为Hexo_v5.4.0"><img src="https://npm.elemecdn.com/anzhiyu-blog@2.1.5/img/badge/Frame-Hexo.svg" alt="博客框架为Hexo_v5.4.0"/></a><a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"><img src="https://npm.elemecdn.com/anzhiyu-blog@2.2.0/img/badge/Copyright-BY-NC-SA.svg" alt="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"/></a></div></div></footer></div><!-- 立即应用暗色模式，避免页面闪烁--><script>(function() {
+  // 检查本地存储中的暗色模式设置
+  const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+  // 如果设置为暗色模式，立即应用到body
+  if (savedDarkMode) {
+    document.body.classList.add('dark-mode');
+  }
 
-          // 防止页面闪烁，在DOM加载完成前设置一个初始类
-          document.documentElement.style.visibility = 'hidden';
-          document.addEventListener('DOMContentLoaded', function() {
-            document.documentElement.style.visibility = 'visible';
-          });
-        })();
+  // 防止页面闪烁，在DOM加载完成前设置一个初始类
+  document.documentElement.style.visibility = 'hidden';
+  document.addEventListener('DOMContentLoaded', function() {
+    document.documentElement.style.visibility = 'visible';
+  });
+})();
+</script>
+<script src="/js/main.js"></script>
 
-    //- Scripts
-    != js('js/main')
-    != js('js/tags')
-    != js('js/categories-accordion')
-    != js('js/highlight')
-    != js('js/load-more')
-    != js('js/header-scroll')
-    != js('js/toc')
-    != js('js/image-zoom')
-    != js('js/share')
-    != js('js/search')
-    != js('js/hide-inline-interaction')
-    != js('js/hide-toggle-interaction')
-    != js('js/dark-mode-sync')
-    != js('js/animations')
-    != js('js/ai-theme')
-    != js('js/loading-animation')
-    != js('js/article-modal')
+<script src="/js/tags.js"></script>
 
-    //- Theme configuration for JavaScript
-    script.
-      window.theme = {
-        features: !{JSON.stringify(theme.features)},
-        code_block: !{JSON.stringify(theme.code_block)},
-        ai_summary: !{JSON.stringify(theme.ai_summary)},
-        categories: !{JSON.stringify(theme.categories)},
-        article_list: !{JSON.stringify(theme.article_list)}
-      };
+<script src="/js/categories-accordion.js"></script>
 
-    //- Custom scripts
-    if theme.custom_scripts
-      != theme.custom_scripts
+<script src="/js/highlight.js"></script>
 
-    //- Inject bottom
-    if theme.inject && theme.inject.bottom
-      each item in theme.inject.bottom
-        != item
+<script src="/js/load-more.js"></script>
+
+<script src="/js/header-scroll.js"></script>
+
+<script src="/js/toc.js"></script>
+
+<script src="/js/image-zoom.js"></script>
+
+<script src="/js/share.js"></script>
+
+<script src="/js/search.js"></script>
+
+<script src="/js/hide-inline-interaction.js"></script>
+
+<script src="/js/hide-toggle-interaction.js"></script>
+
+<script src="/js/dark-mode-sync.js"></script>
+
+<script src="/js/animations.js"></script>
+
+<script src="/js/ai-theme.js"></script>
+
+<script src="/js/loading-animation.js"></script>
+
+<script src="/js/article-modal.js"></script>
+<script>window.theme = {
+  features: {"dark_mode":true,"smooth_scroll":true,"back_to_top":true,"loading_animation":true},
+  code_block: {"height_limit":200,"enable_folding":true,"max_height":"300px","show_lang":true},
+  ai_summary: {"enable":true,"api_key":"","summary_directly":false,"ai_name":"Sana-AI","ai_introduce":"","ai_version":"deepseekv3","buttons":["介绍自己","来点灵感","生成简介"]},
+  categories: {"layout":"accordion","accordion_animation":true,"show_empty_categories":true},
+  article_list: {"card_size":"normal","view_mode":"modal"}
+};
+</script><script src="/js/ai.js"></script><script src="/js/postai.js"></script></body></html>
