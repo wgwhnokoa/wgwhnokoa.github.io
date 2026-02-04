@@ -1,47 +1,28 @@
-/* ===============================
-   全局自定义样式（custom.css）
-   =============================== */
+/* ==================================================
+   方案二：APlayer 出现时自动隐藏夜间模式按钮
+   仅作用于移动端
+   ================================================== */
 
-
-/* ========= APlayer 夜间模式修复 ========= */
-
-/* 保证播放器始终在最上层 */
-.aplayer {
-  z-index: 9999 !important;
-}
-
-/* 夜间模式下：取消暗色滤镜影响 */
-[data-theme="dark"] .aplayer,
-[data-theme="night"] .aplayer {
-  filter: none !important;
-  background-color: #1f1f1f !important;
-}
-
-/* 移动端兜底（重点修复你截图里的问题） */
 @media screen and (max-width: 768px) {
-  .aplayer {
-    filter: none !important;
-    opacity: 1 !important;
+
+  /* 夜间/模式切换按钮（兼容 magzine 各版本） */
+  .darkmode-toggle,
+  .night-toggle,
+  .mode-toggle,
+  .btn-dark,
+  #dark-button,
+  #night-button {
+    transition: opacity 0.3s ease;
+  }
+
+  /* 页面存在 fixed APlayer 时，隐藏夜间按钮 */
+  body:has(.aplayer.aplayer-fixed) .darkmode-toggle,
+  body:has(.aplayer.aplayer-fixed) .night-toggle,
+  body:has(.aplayer.aplayer-fixed) .mode-toggle,
+  body:has(.aplayer.aplayer-fixed) .btn-dark,
+  body:has(.aplayer.aplayer-fixed) #dark-button,
+  body:has(.aplayer.aplayer-fixed) #night-button {
+    opacity: 0 !important;
+    pointer-events: none !important;
   }
 }
-
-/* 防止夜间模式遮罩盖住播放器 */
-#dark-mask,
-.night-mask,
-.dark-mask {
-  pointer-events: none;
-}
-
-/* 确保 fixed 播放器不被覆盖 */
-.aplayer.aplayer-fixed {
-  position: fixed !important;
-  bottom: 0 !important;
-}
-
-/* ========= 可选：播放器夜间更柔和（不刺眼） ========= */
-[data-theme="dark"] .aplayer,
-[data-theme="night"] .aplayer {
-  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.4);
-}
-
-/* ========= END ========= */
