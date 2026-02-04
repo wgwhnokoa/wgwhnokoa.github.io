@@ -1,0 +1,47 @@
+/* ===============================
+   全局自定义样式（custom.css）
+   =============================== */
+
+
+/* ========= APlayer 夜间模式修复 ========= */
+
+/* 保证播放器始终在最上层 */
+.aplayer {
+  z-index: 9999 !important;
+}
+
+/* 夜间模式下：取消暗色滤镜影响 */
+[data-theme="dark"] .aplayer,
+[data-theme="night"] .aplayer {
+  filter: none !important;
+  background-color: #1f1f1f !important;
+}
+
+/* 移动端兜底（重点修复你截图里的问题） */
+@media screen and (max-width: 768px) {
+  .aplayer {
+    filter: none !important;
+    opacity: 1 !important;
+  }
+}
+
+/* 防止夜间模式遮罩盖住播放器 */
+#dark-mask,
+.night-mask,
+.dark-mask {
+  pointer-events: none;
+}
+
+/* 确保 fixed 播放器不被覆盖 */
+.aplayer.aplayer-fixed {
+  position: fixed !important;
+  bottom: 0 !important;
+}
+
+/* ========= 可选：播放器夜间更柔和（不刺眼） ========= */
+[data-theme="dark"] .aplayer,
+[data-theme="night"] .aplayer {
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* ========= END ========= */
