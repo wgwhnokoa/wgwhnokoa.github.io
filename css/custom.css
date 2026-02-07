@@ -1,3 +1,4 @@
+/* ===== 适配手机端，显示日夜模式和特效按钮 ===== */
 @media screen and (max-width: 768px) {
 
   /* 夜间/模式切换按钮（兼容 magzine 各版本） */
@@ -19,5 +20,51 @@
   body:has(.aplayer.aplayer-fixed) #night-button {
     opacity: 0 !important;
     pointer-events: none !important;
+  }
+
+  /* 显示日夜模式 + 特效按钮（手机端显示） */
+  .header-actions,
+  .nav-actions,
+  .theme-toggle,
+  .weather-toggle {
+    display: flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  /* 日夜模式 + 特效按钮容器 */
+  .header-actions {
+    position: static !important;
+    margin-top: 12px;
+    justify-content: flex-start;
+    gap: 12px;
+  }
+
+  /* 图标稍微放大，方便点击 */
+  .header-actions i,
+  .header-actions svg {
+    font-size: 20px;
+  }
+
+}
+
+/* ===== 用于桌面端，确保正常显示 ===== */
+@media screen and (min-width: 769px) {
+  .nav-switches {
+    display: flex;
+    align-items: center;
+    gap: 14px; /* 两个图标的距离 */
+  }
+
+  .nav-switch {
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    opacity: 0.9;
+    transition: opacity 0.2s ease;
+  }
+
+  .nav-switch:hover {
+    opacity: 1;
   }
 }
