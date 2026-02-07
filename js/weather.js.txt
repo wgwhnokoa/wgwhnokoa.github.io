@@ -1,0 +1,61 @@
+/* themes/magzine/source/js/weather.js */
+document.addEventListener('DOMContentLoaded', function() {
+  const SAKURA_URL = "https://cdn.jsdelivr.net/gh/wallleap/cdn/js/sakura.js";
+  const SNOW_URL = "https://cdn.jsdelivr.net/gh/wallleap/cdn/js/snow.js";
+
+  // 获取开关元素（注意：因为开关是动态生成的，这里可能一开始获取不到，建议使用事件委托或延时）
+  // 这里我们使用 MutationObserver 监听 html 的 class 变化来实现自动切换，最稳妥
+  
+  function applyEffect() {
+    // 1. 获取开关状态 (如果开关还没生成，默认为 true)
+    const effectToggle = document.getElementById('sana-effect-toggle');
+    const isEffectOn = effectToggle ? effectToggle.checked : (localStorage.getItem('sanaEffectEnabled') !== 'false');
+    
+    // 2. 获取当前主题状态 (检查 html 标签是否有 dark-mode 类)
+    const isDark = document.documentElement.classList.contains('dark-mode');
+
+    // 3. 清理旧特效
+    const oldScript = document.getElementById('sana-effect-script');
+    if (oldScript) oldScript.remove();
+    
+    // 暴力清理所有全屏 canvas (防止叠加)
+    document.querySelectorAll('body > canvas').forEach(c => c.remove());
+
+    // 4. 如果特效关闭，直接返回
+    if (!isEffectOn) return;
+
+    // 5. 确定要加载的脚本 URL
+    const url = isDark ? SNOW_URL : SAKURA_URL;
+
+    // 6. 加载新脚本
+    const script = document.createElement('script');
+    script.src = url;
+    script.id = 'sana-effect-script';
+    document.body.appendChild(script);
+  }
+
+  // --- 监听机制 ---
+
+  // 1. 监听 HTML class 变化 (感知昼夜模式切换)
+  const observer = new MutationObserver(() => {
+    applyEffect();
+  });
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+
+  // 2. 监听开关点击 (使用事件委托，因为开关是动态插入的)
+  document.body.addEventListener('change', function(e) {
+    // 特效开关变化
+    if (e.target.id === 'sana-effect-toggle') {
+      localStorage.setItem('sanaEffectEnabled', e.target.checked);
+      applyEffect();
+    }
+    // 昼夜开关变化 (虽然 layout.pug 已经处理了类名切换，这里监听是为了触发特效刷新)
+    if (e.target.id === 'sana-theme-toggle') {
+      // 稍微延迟一下，等待 layout.pug 里的逻辑切换完 class
+      setTimeout(applyEffect, 50);
+    }
+  });
+
+  // 3. 初始化运行一次 (延迟确保 DOM 准备好)
+  setTimeout(applyEffect, 500);
+});
