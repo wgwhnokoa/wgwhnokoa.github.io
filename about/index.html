@@ -266,10 +266,11 @@ input:checked + .slider-mini:before { transform: translateX(16px); }
     return true;
   }
   if (!mountSwitchInNav()) {
-    const navObserver = new MutationObserver(function() {
-      if (mountSwitchInNav()) navObserver.disconnect();
-    });
-    navObserver.observe(document.body, { childList: true, subtree: true });
+    let mountAttempts = 0;
+    const mountTimer = setInterval(function() {
+      mountAttempts += 1;
+      if (mountSwitchInNav() || mountAttempts >= 100) clearInterval(mountTimer);
+    }, 100);
   }
 
   // --- 基础 UI 状态初始化 & 监听 ---
