@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sana 的随身听</title>
+<style>html,body{margin:0;height:100%}#blog{display:block;border:0;width:100%;height:100%}
+#myhkLrc,#myhkKsc{background:transparent!important}
+#myhkTips{display:none!important}
+#music-status{position:fixed;bottom:8px;left:12px;background:white;color:#333;padding:8px;border-radius:8px;font:14px system-ui}</style></head>
+<body><iframe id="blog" title="Sana 的博客"></iframe>
+<output id="music-status" hidden>音乐服务暂时无法加载，请刷新重试。</output>
+<script>document.getElementById('blog').addEventListener('load',function(){
+  try {document.title=this.contentDocument.title || "Sana's Blog"} catch {}
+});</script>
+<script>
+(() => {
+  const frame = document.getElementById('blog');
+  const requested = new URLSearchParams(location.search).get('page') || '/';
+  const first = new URL(requested, location.origin);
+  const start = first.origin === location.origin && !first.pathname.startsWith('/music-preview/')
+    ? first.href : location.origin + '/';
+  history.replaceState(null, '', start);
+
+  // Give each article one browser history entry. Frame loads replace their own entry.
+  function navigate(url) {
+    history.pushState(null, '', url);
+    frame.contentWindow.location.replace(url);
+  }
+  window.addEventListener('popstate', () => {
+    if (frame.contentWindow.location.href !== location.href) {
+      frame.contentWindow.location.replace(location.href);
+    }
+  });
+  frame.addEventListener('load', () => {
+    const doc = frame.contentDocument;
+    if (!doc || doc.URL === 'about:blank') return;
+    const view = doc.defaultView;
+    const sync = () => {
+      if (view.location.href !== location.href) history.replaceState(null, '', view.location.href);
+      document.title = doc.title;
+    };
+    sync();
+    view.addEventListener('hashchange', sync);
+    doc.addEventListener('click', event => {
+      const link = event.target.closest?.('a[href]');
+      if (!link || event.defaultPrevented || event.button !== 0 ||
+          event.metaKey || event.ctrlKey || event.shiftKey || event.altKey ||
+          link.hasAttribute('download') || (link.target && link.target !== '_self')) return;
+      const url = new URL(link.href, doc.baseURI);
+      if (url.origin !== location.origin || url.pathname.startsWith('/music-preview/')) return;
+      if (url.pathname !== '/' && !url.pathname.endsWith('/') && !url.pathname.endsWith('.html')) return;
+      event.preventDefault();
+      if (url.href !== location.href) navigate(url.href);
+      else if (url.hash) view.location.replace(url.href);
+    });
+  });
+  frame.src = start;
+})();
+</script>  <style>
+body:has(#myhkplayer) #music-toggle {
+  display: grid; place-items: center; position: fixed; z-index: 2147483647;
+  left: max(8px, env(safe-area-inset-left)); bottom: max(8px, env(safe-area-inset-bottom));
+  width: 44px; height: 44px; padding: 0; border: 2px solid #fff; border-radius: 50%;
+  background: #e8d9eb url("/images/music-avatar.png") 40% 8% / 138% no-repeat;
+  box-shadow: 0 0 0 1px #ba879e, 0 2px 6px #53334640; cursor: pointer;
+}
+#music-toggle::after {
+  content: "♪"; position: absolute; right: -3px; bottom: -2px;
+  display: grid; place-items: center; width: 16px; height: 16px;
+  border: 1px solid white; border-radius: 50%; background: #925470;
+  color: white; font: bold 12px/1 system-ui;
+}
+#music-toggle[aria-expanded="true"]::after {
+  content: "×";
+}
+#music-toggle:focus-visible { outline: 3px solid #4095e5; outline-offset: 2px; }
+body:has(#music-toggle) #myhkplayer {
+  left: 0; bottom: calc(max(8px, env(safe-area-inset-bottom)) + 52px);
+  display: none !important; transform: none; transition: none;
+}
+body:has(#music-toggle[aria-expanded="true"]) #myhkplayer {
+  display: block !important;
+}
+body #myhkplayer .switch-player { display: none; }
+@media (max-width: 600px), (pointer: coarse) and (max-height: 500px) {
+  body:has(#music-toggle) #myhkplayer {
+    --panel-width: min(300px, calc(100vw - max(8px, env(safe-area-inset-left)) - max(8px, env(safe-area-inset-right))));
+    left: max(8px, env(safe-area-inset-left));
+    width: var(--panel-width);
+    max-height: calc(100dvh - max(8px, env(safe-area-inset-top)) - max(8px, env(safe-area-inset-bottom)) - 52px);
+    overflow: hidden auto;
+    overscroll-behavior: contain;
+  }
+  #myhkplayer .myhkplayer, #myhkplayer .myhkplaylist,
+  #myhkplayer .myhkplaylist .myhklist, #myhkplayer .myhkplaylist .musicheader {
+    box-sizing: border-box;
+    width: var(--panel-width);
+  }
+  #myhkplayer .myhkplaylist li {
+    box-sizing: border-box;
+    max-width: 100%;
+  }
+  #myhkplayer .switch-playlist::after {
+    content: "";
+    position: absolute;
+    inset: -8px -4px;
+  }
+}
+@media (any-pointer: fine) {
+  #music-toggle, body #myhkplayer, body #myhkplayer * {
+    cursor: url("/images/music-cursor.cur") 0 0, default !important;
+  }
+}
+#myhkplayer .music-order {
+  float: right; position: relative; z-index: 1; box-sizing: border-box;
+  appearance: none; width: 78px; height: 24px; padding: 0 17px 0 8px;
+  border: 0; border-radius: 12px; cursor: pointer;
+  font: 500 12px/24px system-ui, sans-serif; color: #fff;
+  background: #513c50 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 8 5'%3E%3Cpath d='m1 1 3 3 3-3' fill='none' stroke='%23f1dce7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") right 7px center / 8px 5px no-repeat;
+}
+#myhkplayer .music-order:hover { background-color: #65495f; }
+#myhkplayer .music-order:focus:not(:focus-visible) { outline: none; }
+#myhkplayer .music-order:focus-visible { outline: 1px solid #fff; outline-offset: 1px; }
+#myhkplayer .music-order option { color: #302632; background: white; }
+/* The skin may set display on its original status label while a track loads. */
+#myhkplayer .music-order + .myhkmoshi { display: none !important; }
+</style>
+<button id="music-toggle" type="button" hidden aria-controls="myhkplayer"
+ aria-expanded="false" aria-label="展开音乐播放器"></button>
+<script>
+  function stylePlaylistNames(player) {
+    const albums = player.querySelector('.album-list');
+    const header = player.querySelector('.song-list .musicheader');
+    if (!albums || !header || albums.dataset.namesReady) return;
+    const shortName = name => name.replace(/^纯音乐[（(]不是很纯[）)]/, '纯音乐');
+    const updateAlbums = () => {
+      const heading = albums.querySelector('.musicheader');
+      if (heading && heading.textContent.trim() === "Sana's Blog - 音乐播放器") {
+        heading.textContent = 'Sana 的随身听';
+      }
+      for (const row of albums.querySelectorAll('.myhklist li')) {
+        const title = row.lastChild;
+        if (title?.nodeType !== Node.TEXT_NODE) continue;
+        const match = title.data.trim().match(/^《?(.+?)》? - wgwhnokoa$/);
+        if (match) title.data = shortName(match[1]);
+      }
+    };
+    const updateHeader = () => {
+      const title = header.querySelector('span');
+      if (title && shortName(title.textContent) !== title.textContent) {
+        title.textContent = shortName(title.textContent);
+      }
+    };
+    const changes = { childList: true, subtree: true, characterData: true };
+    new MutationObserver(updateAlbums).observe(albums, changes);
+    new MutationObserver(updateHeader).observe(header, changes);
+    albums.dataset.namesReady = 'true';
+    updateAlbums();
+    updateHeader();
+  }
+  function enableOrderMenu() {
+    const player = document.getElementById('myhkplayer');
+    const label = player.querySelector('.myhkmoshi');
+    const cycle = player.querySelector('.qhms');
+    if (!label || !cycle || player.querySelector('.music-order')) return;
+
+    const modes = new Map([
+      ['随机播放', '随机播放'],
+      ['单曲循环', '单曲循环'],
+      ['专辑循环', '列表循环']
+    ]);
+    const menu = document.createElement('select');
+    menu.className = 'music-order';
+    menu.setAttribute('aria-label', '播放顺序');
+    for (const [nativeName, name] of modes) menu.add(new Option(name, nativeName));
+    const currentMode = () => label.textContent.trim();
+    const sync = () => { menu.value = currentMode(); };
+    label.before(menu);
+    sync();
+    new MutationObserver(sync).observe(label, { childList: true, subtree: true, characterData: true });
+    menu.addEventListener('change', () => {
+      const selected = menu.value;
+      for (let step = 1; step < modes.size && currentMode() !== selected; step++) {
+        cycle.click();
+      }
+      sync();
+    });
+  }
+  const musicToggle = document.getElementById('music-toggle');
+  musicToggle.addEventListener('click', () => {
+    const opening = musicToggle.getAttribute('aria-expanded') === 'false';
+    if (opening) {
+      stylePlaylistNames(document.getElementById('myhkplayer'));
+      enableOrderMenu();
+    }
+    musicToggle.setAttribute('aria-expanded', String(opening));
+    musicToggle.setAttribute('aria-label', opening ? '收起音乐播放器' : '展开音乐播放器');
+  });
+</script>
+<script src="https://myhkw.cn/player/js/jquery.min.js" defer></script>
+<script src="https://myhkw.cn/api/player/179386746834" id="myhk" key="179386746834" skin="player" au="0" m="1" lr="l" defer
+ onerror="document.getElementById('music-status').hidden=false"></script></body></html>

@@ -1,36 +1,62 @@
-
-// 分享功能处理
+// 分享内容跟随文章地址和当前目录小节。
 document.addEventListener('DOMContentLoaded', function() {
-  // 复制链接功能
-  const copyButtons = document.querySelectorAll('.share-btn.copy');
-  copyButtons.forEach(button => {
-    button.addEventListener('click', function(e) {
-      e.preventDefault();
-      const url = window.location.origin + this.getAttribute('data-copy');
+  const buttons = document.querySelector('.post-share .share-buttons');
+  if (!buttons) return;
 
-      // 创建临时输入框
-      const tempInput = document.createElement('input');
-      tempInput.value = url;
-      document.body.appendChild(tempInput);
-      tempInput.select();
-      document.execCommand('copy');
-      document.body.removeChild(tempInput);
+  function syncShareLinks() {
+    const articleUrl = window.location.href;
+    for (const link of buttons.querySelectorAll('a')) {
+      const param = link.dataset.shareParam;
+      if (param) {
+        const platform = new URL(link.href);
+        platform.searchParams.set(param, articleUrl);
+        link.href = platform.href;
+      } else {
+        link.href = articleUrl;
+      }
+    }
+  }
 
-      // 显示复制成功提示
-      const originalText = this.querySelector('span').textContent;
-      this.querySelector('span').textContent = '已复制!';
-      setTimeout(() => {
-        this.querySelector('span').textContent = originalText;
-      }, 2000);
+  syncShareLinks();
+  window.addEventListener('hashchange', syncShareLinks);
+  window.addEventListener('pageshow', syncShareLinks);
+
+  const copyButton = buttons.querySelector('.copy');
+  if (copyButton) {
+    const label = copyButton.querySelector('span');
+    const originalText = label.textContent;
+    let resetTimer;
+    copyButton.addEventListener('click', async function(event) {
+      event.preventDefault();
+      const url = window.location.href;
+      let copied;
+      try {
+        await navigator.clipboard.writeText(url);
+        copied = true;
+      } catch {
+        const input = document.createElement('input');
+        input.value = url;
+        document.body.appendChild(input);
+        input.select();
+        try {
+          copied = document.execCommand('copy');
+        } finally {
+          input.remove();
+          copyButton.focus({preventScroll: true});
+        }
+      }
+      clearTimeout(resetTimer);
+      label.textContent = copied ? '已复制!' : '复制失败';
+      resetTimer = setTimeout(() => { label.textContent = originalText; }, 2000);
     });
-  });
+  }
 
   // 微信分享功能
   const wechatButtons = document.querySelectorAll('.share-btn.wechat');
   wechatButtons.forEach(button => {
     button.addEventListener('click', function(e) {
       e.preventDefault();
-      const url = window.location.origin + this.getAttribute('data-wechat');
+      const url = window.location.href;
 
       // 创建二维码弹窗
       const modal = document.createElement('div');

@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sana 的随身听</title>
+<style>html,body{margin:0;height:100%}#blog{display:block;border:0;width:100%;height:100%}
+#myhkLrc,#myhkKsc{background:transparent!important}
+#myhkTips{display:none!important}
+#music-status{position:fixed;bottom:8px;left:12px;background:white;color:#333;padding:8px;border-radius:8px;font:14px system-ui}</style></head>
+<body><iframe id="blog" title="Sana 的博客" src="/"></iframe>
+<output id="music-status" hidden>音乐服务暂时无法加载，请刷新重试。</output>
+<script>document.getElementById('blog').addEventListener('load',function(){
+  try {document.title=this.contentDocument.title || "Sana's Blog"} catch {}
+});</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<script>var meting_api='https://api.injahow.cn/meting/?server=:server&type=:type&id=:id&auth=:auth&r=:r';</script>
+<script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+<meting-js server="netease" type="playlist" id="12903254714" fixed="true"></meting-js>
+<script src="/js/music-player.js"></script></body></html>

@@ -71,21 +71,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 创建目录链接
     const tocLink = document.createElement('a');
-    tocLink.href = `#${heading.id}`;
+    tocLink.href = `#${encodeURIComponent(heading.id)}`;
     tocLink.textContent = heading.textContent;
-
-    // 添加点击事件，平滑滚动到对应标题
-    tocLink.addEventListener('click', function(e) {
-      e.preventDefault();
-
-      // 滚动到对应标题
-      document.querySelector(`#${heading.id}`).scrollIntoView({
-        behavior: 'smooth'
-      });
-
-      // 更新活动目录项
-      updateActiveTocItem(heading.id);
-    });
 
     // 将链接添加到目录项
     tocItem.appendChild(tocLink);
@@ -152,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 为当前标题对应的目录项添加活动状态
     if (currentHeading) {
-      const activeLink = tocContainer.querySelector(`a[href="#${currentHeading}"]`);
+      const activeLink = tocContainer.querySelector(`a[href="#${CSS.escape(encodeURIComponent(currentHeading))}"]`);
       if (activeLink) {
         activeLink.classList.add('active');
       }
@@ -241,23 +228,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // 为移动端目录链接添加点击事件
     const mobileTocLinks = mobileTocContent.querySelectorAll('a');
     mobileTocLinks.forEach(link => {
-      link.addEventListener('click', function(e) {
-        e.preventDefault();
+      link.addEventListener('click', closeMobileToc);
 
-        // 获取目标ID
-        const targetId = this.getAttribute('href').substring(1);
-
-        // 滚动到对应标题
-        document.querySelector(`#${targetId}`).scrollIntoView({
-          behavior: 'smooth'
-        });
-
-        // 更新活动目录项
-        updateActiveTocItem(targetId);
-
-        // 关闭移动端目录
-        closeMobileToc();
-      });
     });
 
     /**
