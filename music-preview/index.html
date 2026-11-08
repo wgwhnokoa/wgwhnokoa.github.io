@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Sana 的随身听</title>
+<title>Sana&#39;s Blog</title>
 <style>html,body{margin:0;height:100%}#blog{display:block;border:0;width:100%;height:100%}
 #myhkLrc,#myhkKsc{background:transparent!important}
 #myhkTips{display:none!important}
@@ -9,7 +9,7 @@
 <body><iframe id="blog" title="Sana 的博客"></iframe>
 <output id="music-status" hidden>音乐服务暂时无法加载，请刷新重试。</output>
 <script>document.getElementById('blog').addEventListener('load',function(){
-  try {document.title=this.contentDocument.title || "Sana's Blog"} catch {}
+  try { if (this.contentDocument.title) document.title = this.contentDocument.title; } catch {}
 });</script>
 <script>
 (() => {
@@ -18,14 +18,23 @@
   const first = new URL(requested, location.origin);
   const start = first.origin === location.origin && !first.pathname.startsWith('/music-preview/')
     ? first.href : location.origin + '/';
+  const titles = new Map([["/2026/03/02/Senren%20Banka/","《千恋*万花》：Galgame界的原神？我的入坑作杂谈 · Sana's Blog"],["/2026/02/01/First-Introduction/","算是自我介绍？ · Sana's Blog"],["/2026/07/01/Standard/","关于本站的评分细则与交流指南 · Sana's Blog"],["/2026/06/14/Atri/","《Atri-My Dear Moments》：标准的新人入坑作 · Sana's Blog"]]);
+  const siteTitle = document.title;
+  function showTitle(pathname) {
+    const path = pathname.replace(/index[.]html$/, '');
+    document.title = titles.get(path) || titles.get(path.replace(/[/]?$/, '/')) || siteTitle;
+  }
   history.replaceState(null, '', start);
+  showTitle(location.pathname);
 
   // Give each article one browser history entry. Frame loads replace their own entry.
   function navigate(url) {
     history.pushState(null, '', url);
+    showTitle(location.pathname);
     frame.contentWindow.location.replace(url);
   }
   window.addEventListener('popstate', () => {
+    showTitle(location.pathname);
     if (frame.contentWindow.location.href !== location.href) {
       frame.contentWindow.location.replace(location.href);
     }

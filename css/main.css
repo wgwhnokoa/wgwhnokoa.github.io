@@ -175,6 +175,13 @@ p {
   gap: var(--spacing-lg);
 }
 
+@media (min-width: 769px) {
+  .nav-menu > a.nav-item,
+  .nav-menu > .has-submenu {
+    align-self: center;
+  }
+}
+
 .nav-logo {
   font-size: 1.5rem;
   font-weight: 700;

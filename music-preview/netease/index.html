@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Sana 的随身听</title>
+<title>Sana&#39;s Blog</title>
 <style>html,body{margin:0;height:100%}#blog{display:block;border:0;width:100%;height:100%}
 #myhkLrc,#myhkKsc{background:transparent!important}
 #myhkTips{display:none!important}
@@ -9,7 +9,7 @@
 <body><iframe id="blog" title="Sana 的博客" src="/"></iframe>
 <output id="music-status" hidden>音乐服务暂时无法加载，请刷新重试。</output>
 <script>document.getElementById('blog').addEventListener('load',function(){
-  try {document.title=this.contentDocument.title || "Sana's Blog"} catch {}
+  try { if (this.contentDocument.title) document.title = this.contentDocument.title; } catch {}
 });</script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
 <script>var meting_api='https://api.injahow.cn/meting/?server=:server&type=:type&id=:id&auth=:auth&r=:r';</script>
